@@ -48,26 +48,38 @@ function getAdoptionFee(animalName) {
 }
 // Main program
 console.log("Welcome to the Pet Shelter System");
-while (true) {
+while (true) { //The while loop fixed to properly contain all action handling the code
     let action = readlineSync.question("Choose an action: 'add', 'fee', or 'exit': ").toLowerCase();
     if (action === "exit") {
         console.log("Goodbye!");
         break;
-    }
-    if (action === "add") {
+    } else if (action === "add") {
+    try { 
         let animal = readlineSync.question("Enter the animal's name: ");
-        let fee = Number(readlineSync.question("Enter the adoption fee: "));
+        let feeInput = readlineSync.question("Enter the adoption fee: ");
+        let fee = Number(feeInput);
+
+        if (isNaN(fee)) { //Added validation to check if fee is a valid number
+            throw new Error("Adoption fee must be a valid number!");
+        }
         addAnimal(animal, fee);
         console.log(`${animal} added with a fee of $${fee}.`);
-    } else if (action === "fee") {
-        let animal = readlineSync.question("Enter the animal's name to find its adoption fee: ");
-        console.log(`${animal}'s adoption fee is $${getAdoptionFee(animal)}.`);
-    } else {
-        console.log("Invalid action. Please choose 'add', 'fee', or 'exit'.");
+    } catch (error) {
+        console.log("Error", error.message);
     }
+} else if (action === "fee") {
+    
+    try {
+        let animal = readlineSync.question("Enter the animal's name to find its adoption fee: ");
+        let fee = getAdoptionFee(animal);
+        console.log(`${animal}'s adoption fee is $${fee}.`);
+    } catch (error){
+        console.log("Error", error.message);
+    } 
+ } else { //Added proper else clause to handle invalid actions
+    console.log("Invalid action. Please choose 'add', 'fee', or 'exit'.")
+ }
 }
-
-
 
 /*
 Problems to Solve
